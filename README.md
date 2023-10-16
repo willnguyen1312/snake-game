@@ -42,6 +42,16 @@ The snake and apple cells are rendered using the `snake` and `apple` classes res
 
 - `intervalId`: The interval is set up by using `setInterval` to call `moveSnake` every `SPEED` milliseconds. As the game state changes, this will be cleared to start a new section. It will also be cleaned up on the unmount lifecycle to avoid memory leaks.
 
+### Test Cases
+
+- The game is display in 15x15 grid
+- The snake should be controlled with arrow and WASD keystrokes
+- The snake should start with a length of 3
+- One apple at a time should appear in a random position on the grid. When collected, it should increase the score by one, increase the snake length by one, and change apple to to another random position
+- Display a score for how many apples have been collected
+- If the snake head collides with the rest of the body, the game should end
+- If the snake head collides with the borders, the game should end
+
 ### Nice to have
 
 - [ ] Add test coverage
