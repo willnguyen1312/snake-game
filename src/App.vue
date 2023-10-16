@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const SIZE = 15;
 const SPEED = 200;
+const INITIAL_SNAKE_SIZE = 3;
+type GameState = "idle" | "playing" | "gameover";
 type Direction = "up" | "down" | "left" | "right";
 
 const generateInitialSnakeBody = () => {
-  return ["1,1", "1,2", "1,3"];
+  const result: string[] = [];
+  const randomRow = Math.floor(Math.random() * SIZE) + 1;
+
+  for (let cell = 0; cell < INITIAL_SNAKE_SIZE; cell++) {
+    result.push(`${randomRow},${cell + 1}`);
+  }
+
+  return result;
 };
 
 const getRandomCell = () => {
@@ -26,6 +35,7 @@ const generateNextApple = () => {
 
 const snakeCells = ref<string[]>(generateInitialSnakeBody());
 const appleCell = ref<string>(generateNextApple());
+let gameState: GameState = "idle";
 let direction: Direction = "right";
 let intervalId: number | null = null;
 let inTransition = false;
@@ -80,6 +90,7 @@ const moveSnake = () => {
   if (!isValidNewHead && intervalId) {
     clearInterval(intervalId);
     intervalId = null;
+    gameState = "gameover";
     alert("Game Over");
     return;
   }
@@ -99,15 +110,22 @@ const moveSnake = () => {
 };
 
 const startGame = () => {
-  if (intervalId) return;
+  if (gameState == "playing") return;
 
-  snakeCells.value = generateInitialSnakeBody();
-  appleCell.value = generateNextApple();
-  direction = "right";
-  inTransition = false;
+  if (gameState === "gameover") {
+    snakeCells.value = generateInitialSnakeBody();
+    appleCell.value = generateNextApple();
+    direction = "right";
+    inTransition = false;
+  }
 
+  gameState = "playing";
   intervalId = setInterval(moveSnake, SPEED);
 };
+
+const currentScore = computed(() => {
+  return snakeCells.value.length - INITIAL_SNAKE_SIZE;
+});
 
 const moveUp = () => {
   if (direction === "down") return;
@@ -130,8 +148,7 @@ const moveRight = () => {
 };
 
 const handleKeyDown = (event: KeyboardEvent) => {
-  event.preventDefault();
-  if (!intervalId) return;
+  if (gameState !== "playing") return;
 
   const handlers: Record<string, () => void> = {
     ArrowUp: moveUp,
@@ -166,7 +183,7 @@ onUnmounted(() => {
 
 <template>
   <button @click="startGame">Start Game</button>
-  <p>Score: 0</p>
+  <p>Score: {{ currentScore }}</p>
 
   <div class="grid">
     <div v-for="row in SIZE" :key="row" class="row">
