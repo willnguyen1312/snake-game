@@ -5,7 +5,7 @@
 ### Constants
 
 - `SIZE` - 15 - the size of the board
-- `REFRESH_TIME` - 200 milliseconds - the time between each move
+- `SPEED` - 200 milliseconds - the time between each move
 
 ### State
 
@@ -18,9 +18,9 @@ Note: the cells are represented by the string of the row and column, e.g. `1-1` 
 
 ### Rendering
 
-The board is generated using a nested for loops with the size of 15. The board has 15 rows and 15 columns as per requirement. Each row is styled by simple flexbox to layout its cells horizontally.
+The board is generated using a nested for loops with a size of 15. The board has 15 rows and 15 columns as per requirement. Each row is styled by a simple flexbox to lay out its cells horizontally.
 
-As the game starts, the snake will move to the right and the apple will be randomly generated on the board after eaten by the snake. The snake move is controlled by WASD and arrow keys. The snake will die if it hits the wall or itself. The game will be reset if the snake dies.
+As the game starts, the snake will move to the right and the apple will be randomly generated on the board after being eaten by the snake. The snake move is controlled by WASD and arrow keys. The snake will die if it hits the wall or itself. The game will be reset if the snake dies.
 
 The snake and apple cells are rendered using the `snake` and `apple` classes respectively.
 
@@ -32,13 +32,15 @@ The snake and apple cells are rendered using the `snake` and `apple` classes res
 
 - `handleKeyDown`: This function handles the keydown event and updates the snake direction accordingly. The snake direction is updated only if the key pressed is valid and the snake is not moving in the opposite direction.
 
-- `checkValidNewHead`: This function checks if the new head is valid. The new head is valid if it is not occupied by the snake and it is not out of bound.
+- `checkValidNewHead`: This function checks if the new head is valid. The new head is valid if it is not occupied by the snake and it is not out of bounds.
 
 - `getNewHead`: This function calculates the new head based on the current head and the direction. The new head is calculated by adding the current head with the current direction vector.
 
-- `moveSnake`: This function moves the snake to the next cell based on the current direction. It makes use of the `checkValidNewHead` and `getNewHead` functions. The snake will die if it hits the wall or itself. The game states will be reset if the snake dies. Otherwise, add new head cell to the snake cells and remove the tail cell.
+- `moveSnake`: This function moves the snake to the next cell based on the current direction. It makes use of the `checkValidNewHead` and `getNewHead` functions. The snake will die if it hits the wall or itself. The game states will be reset if the snake dies. Otherwise, add a new head cell to the snake cells and remove the tail cell.
 
 - `generateNextApple`: This function generates the next apple cell by randomly generating a row and column and checking if the cell is not occupied by the snake.
+
+- `intervalId`: The interval is set up by using `setInterval` to call `moveSnake` every `SPEED` milliseconds. As the game state changes, this will be cleared to start a new section. It will also be cleaned up on the unmount lifecycle to avoid memory leaks.
 
 ### Nice to have
 
