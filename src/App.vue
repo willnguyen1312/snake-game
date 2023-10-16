@@ -20,7 +20,7 @@ const generateInitialSnakeBody = () => {
 
 const getRandomCell = () => {
   return `${Math.floor(Math.random() * SIZE) + 1},${Math.floor(
-    Math.random() * SIZE + 1
+    Math.random() * SIZE + 1,
   )}`;
 };
 
