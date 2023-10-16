@@ -20,7 +20,7 @@ const generateInitialSnakeBody = () => {
 
 const getRandomCell = () => {
   return `${Math.floor(Math.random() * SIZE) + 1},${Math.floor(
-    Math.random() * SIZE + 1,
+    Math.random() * SIZE + 1
   )}`;
 };
 
@@ -38,6 +38,9 @@ const appleCell = ref<string>(generateNextApple());
 let gameState: GameState = "idle";
 let direction: Direction = "right";
 let intervalId: number | null = null;
+
+// prevent multiple keydown events in one interval
+// that causes snake to go back on itself and die which is a bad UX
 let inTransition = false;
 
 const checkSnakeCell = (row: number, column: number) => {
