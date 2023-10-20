@@ -98,6 +98,9 @@ const moveSnake = () => {
     return;
   }
 
+  // Reset transition flag
+  inTransition = false;
+
   // add new head
   snakeCells.value.push(newHead);
 
@@ -109,7 +112,6 @@ const moveSnake = () => {
 
   // remove tail
   snakeCells.value.shift();
-  inTransition = false;
 };
 
 const startGame = () => {
